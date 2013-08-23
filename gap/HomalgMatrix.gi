@@ -1821,10 +1821,10 @@ InstallMethod( CreateHomalgMatrixFromList,
   function( L, R )
     local M;
     
-    if IsMatrix( L ) and ForAll( L, r -> ForAll( r, IsRingElement ) ) then
+    if IsMatrix( L ) and ForAll( L, r -> ForAll( r, x -> IsRingElement(x) or IsString (x)) ) then
         M := List( L, r -> List( r, String ) );
         M := Concatenation( "[[", JoinStringsWithSeparator( List( M, r -> JoinStringsWithSeparator( r ) ), "],[" ), "]]" );
-    elif IsList( L ) and ForAll( L, IsRingElement ) then
+    elif IsList( L ) and ForAll( L, r -> IsRingElement(r) or IsString(r) ) then
         ## this resembles NormalizeInput in Maple's homalg ( a legacy ;) )
         M := Concatenation( "[[", JoinStringsWithSeparator( List( L, String ), "],[" ), "]]" );
     else
@@ -1843,10 +1843,10 @@ InstallMethod( CreateHomalgMatrixFromList,
   function( L, r, c, R )
     local M;
     
-    if IsMatrix( L ) and ForAll( L, r -> ForAll( r, IsRingElement ) ) then
-        M := List( L, r -> List( r, String ) );
-        M := Concatenation( "[[", JoinStringsWithSeparator( List( M, r -> JoinStringsWithSeparator( r ) ), "],[" ), "]]" );
-    elif IsList( L ) and ForAll( L, IsRingElement ) then
+    if IsMatrix( L ) and ForAll( L, r -> ForAll( r, x -> IsRingElement(x) or IsString(x) ) ) then
+        M := List( Concatenation( L ), String );
+        M := Concatenation( "[", JoinStringsWithSeparator( M ), "]" );
+    elif IsList( L ) and ForAll( L, r -> IsRingElement(r) or IsString(r) ) then
         M := Concatenation( "[", JoinStringsWithSeparator( List( L, String ) ), "]" );
     else
         M := String( L );
@@ -1949,7 +1949,7 @@ InstallGlobalFunction( HomalgMatrix,
             return CallFuncList( CreateHomalgMatrixFromString, arg );
             
         elif not IsHomalgInternalRingRep( R ) and		## the ring R is not internal,
-          ( ( IsList( M ) and ForAll( M, IsRingElement ) ) or	## while M is either a list of ring elements,
+          ( ( IsList( M ) and ForAll( M, r -> IsRingElement(r) or IsString(r) ) ) or	## while M is either a list of ring elements,
             IsMatrix( M ) ) then				## or a matrix of (hopefully) ring elements
             
             return CallFuncList( CreateHomalgMatrixFromList, arg );
