@@ -1826,9 +1826,9 @@ InstallMethod( CreateHomalgMatrixFromList,
         M := Concatenation( "[[", JoinStringsWithSeparator( List( M, r -> JoinStringsWithSeparator( r ) ), "],[" ), "]]" );
     else
         ## this resembles NormalizeInput in Maple's homalg ( a legacy ;) )
-        # M := Concatenation( "[[", JoinStringsWithSeparator( List( L, String ), "],[" ), "]]" );
+        M := Concatenation( "[[", JoinStringsWithSeparator( List( L, String ), "],[" ), "]]" );
         ## What is the use case for this? Wouldn't it be better to replace this by an error message?
-        Error( "the number of rows and columns must be specified to construct a matrix from a list" );
+        # Error( "the number of rows and columns must be specified to construct a matrix from a list" );
     fi;
     
     return CreateHomalgMatrixFromString( M, R );
